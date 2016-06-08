@@ -1,13 +1,11 @@
 ﻿using Prism.Unity;
 using Microsoft.Practices.Unity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows;
 using WpfThreading.Views;
-using WpfThreading.Models;
+using WpfThreading.Db;
+using WpfThreading.Reports;
+using WpfThreading.Services;
 
 namespace WpfThreading
 {
@@ -27,7 +25,16 @@ namespace WpfThreading
         {
             base.ConfigureContainer();
 
-            Container.RegisterType<IDbGateway, DbGateway>();
+            //Container.RegisterInstance<IDbGateway>(new DbGatewayDemo());
+            Container.RegisterInstance<IDbGateway>(
+                new DbGatewayPgSql(
+                    ConfigurationManager
+                        .ConnectionStrings["TOPODATA"]
+                        .ConnectionString));
+
+            Container.RegisterType<IReportGenerator, ReportGenerator>(
+                new InjectionConstructor(
+                    Container.Resolve<IDbGateway>()));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfThreading.Models
+namespace WpfThreading.Entities
 {
     public class Aktivitaetszeitraum
     {

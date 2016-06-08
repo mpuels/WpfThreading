@@ -12,19 +12,30 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <TextBox Text="{Binding Cid, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
-            <DatePicker Text="{Binding Von, UpdateSourceTrigger=PropertyChanged}" Language="de-DE"/>
-            <DatePicker Text="{Binding Bis, UpdateSourceTrigger=PropertyChanged}" Language="de-DE"/>
+            <DatePicker Text="{Binding Von, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedDate="{Binding Von, UpdateSourceTrigger=PropertyChanged}"
+                        Language="de-DE"/>
+            <DatePicker Text="{Binding Bis, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedDate="{Binding Bis, UpdateSourceTrigger=PropertyChanged}"
+                        Language="de-DE"/>
+            <Button Command="{Binding AddAktivitaetszeitraum}" Content="Zur Suche Hinzufügen"/>
             <Button Command="{Binding StarteSuche}" Content="{Binding StarteSucheLabel}"  />
         </StackPanel>
 
-        <DataGrid ItemsSource="{Binding Eintraege}" Grid.Row="1"/>
-        <StatusBar Grid.Row="2">
+        <Expander Header="Aktivitätszeiträume" Grid.Row="1">
+            <DataGrid ItemsSource="{Binding Aktivitaetszeitraeume}"/>
+        </Expander>
+
+        <DataGrid ItemsSource="{Binding ErweiterteGoodSyncLogs}" Grid.Row="2" IsReadOnly="True"/>
+
+        <StatusBar Grid.Row="3">
             <TextBlock Text="{Binding StatusBarText}"/>
         </StatusBar>
     </Grid>

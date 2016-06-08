@@ -6,3 +6,5 @@
 /packages
 /WpfThreading/bin/Debug
 /WpfThreading/obj/Debug
+/WpfThreadingTests/obj/Debug
+/WpfThreadingTests/bin/Debug
