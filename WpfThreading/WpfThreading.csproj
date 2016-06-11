@@ -89,6 +89,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\AggListeDDWeb2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ErweiterteGoodSyncLogsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -102,6 +110,7 @@
     <Compile Include="Entities\Aktivitaetszeitraum.cs" />
     <Compile Include="Db\DbGatewayDemo.cs" />
     <Compile Include="Entities\ExportStatisticEintrag.cs" />
+    <Compile Include="RegionNames.cs" />
     <Compile Include="Services\IDbGateway.cs" />
     <Compile Include="Entities\ImportStatisticEintrag.cs" />
     <Compile Include="Entities\ErweiterterGoodSyncLogEintrag.cs" />
@@ -109,7 +118,15 @@
     <Compile Include="Reports\ReportGenerator.cs" />
     <Compile Include="Reports\Zeitstrahleintrag.cs" />
     <Compile Include="Reports\ZeitstrahlGenerator.cs" />
+    <Compile Include="ViewModels\AggListeDDWeb2ViewModel.cs" />
+    <Compile Include="ViewModels\ErweiterteGoodSyncLogsViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\AggListeDDWeb2View.xaml.cs">
+      <DependentUpon>AggListeDDWeb2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ErweiterteGoodSyncLogsView.xaml.cs">
+      <DependentUpon>ErweiterteGoodSyncLogsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

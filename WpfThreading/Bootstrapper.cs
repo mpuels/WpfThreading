@@ -35,6 +35,9 @@ namespace WpfThreading
             Container.RegisterType<IReportGenerator, ReportGenerator>(
                 new InjectionConstructor(
                     Container.Resolve<IDbGateway>()));
+
+            Container.RegisterTypeForNavigation<ErweiterteGoodSyncLogsView>();
+            Container.RegisterTypeForNavigation<AggListeDDWeb2View>();
         }
     }
 }

@@ -4,39 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:WpfThreading="clr-namespace:WpfThreading" 
         xmlns:ViewModels="clr-namespace:WpfThreading.ViewModels"
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:local="clr-namespace:WpfThreading.Views"
         mc:Ignorable="d"
+        Language="de-DE"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <!-- Ersatz für TabControl
+        
+        Jeder Button hier entspricht einem Tab in einem TabControl.
+        Wenn hier ein neuer Button mit
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBox Text="{Binding Cid, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
-            <DatePicker Text="{Binding Von, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedDate="{Binding Von, UpdateSourceTrigger=PropertyChanged}"
-                        Language="de-DE"/>
-            <DatePicker Text="{Binding Bis, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedDate="{Binding Bis, UpdateSourceTrigger=PropertyChanged}"
-                        Language="de-DE"/>
-            <Button Command="{Binding AddAktivitaetszeitraum}" Content="Zur Suche Hinzufügen"/>
-            <Button Command="{Binding StarteSuche}" Content="{Binding StarteSucheLabel}"  />
+            CommandParameter = MyView
+
+        hinzugefügt wird, dann muss in
+        
+            Bootstrapper.cs:Bootstrapper.ConfigureContainer()
+        
+        die Zeile
+        
+            Container.RegisterTypeForNavigation<MyView>();
+        
+        hinzugefügt werden.
+        -->
+        <StackPanel x:Name="SwitchView" Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button x:Name="ErweiterteGoodSyncLogsView"
+                    Command="{Binding NavigateCommand}" CommandParameter="ErweiterteGoodSyncLogsView">
+                Erweiterte GoodSync-Logs
+            </Button>
+
+            <Button x:Name="AggListeDDWeb2View"
+                    Command="{Binding NavigateCommand}" CommandParameter="AggListeDDWeb2View">
+                AggListeDDWeb2
+            </Button>
         </StackPanel>
 
-        <Expander Header="Aktivitätszeiträume" Grid.Row="1">
-            <DataGrid ItemsSource="{Binding Aktivitaetszeitraeume}"/>
-        </Expander>
-
-        <DataGrid ItemsSource="{Binding ErweiterteGoodSyncLogs}" Grid.Row="2" IsReadOnly="True"/>
-
-        <StatusBar Grid.Row="3">
-            <TextBlock Text="{Binding StatusBarText}"/>
-        </StatusBar>
+        <ContentControl Grid.Row="2" prism:RegionManager.RegionName="{x:Static WpfThreading:RegionNames.MainContentRegion}"/>
     </Grid>
 </Window>
