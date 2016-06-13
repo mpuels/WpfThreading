@@ -16,11 +16,11 @@ namespace WpfThreading.Db
     /// </summary>
     public class DbGatewayDemo : IDbGateway
     {
-        public async Task<IEnumerable<ImportStatisticEintrag>> FetchImportStatisticAsync(
+        public async Task<IEnumerable<ImportStatisticAggdEintrag>> Public_BinaryData_Import_Statistic_Aggd_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken)
         {
-            var t = new Task<ICollection<ImportStatisticEintrag>>(
+            var t = new Task<ICollection<ImportStatisticAggdEintrag>>(
                 () => importstatisticDummies(aktivitaetszeitraeume),
                 cancellationToken);
 
@@ -31,25 +31,32 @@ namespace WpfThreading.Db
             return erweiterteGoodSyncLogs;
         }
 
-        public async Task<IEnumerable<ExportStatisticEintrag>> FetchExportStatisticAsync(
+        public async Task<IEnumerable<ExportStatisticEintrag>> Public_BinaryData_Export_Statistic_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        private ICollection<ImportStatisticEintrag> importstatisticDummies(
+        public async Task<IEnumerable<Entities.pgmssql.BinaryData_Controller>> Pgmssql_BinaryData_ControllerAsync(
+            IEnumerable<int> cids,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        private ICollection<ImportStatisticAggdEintrag> importstatisticDummies(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume)
         {
-            var erweiterteGoodSyncLogs = new List<ImportStatisticEintrag>();
+            var erweiterteGoodSyncLogs = new List<ImportStatisticAggdEintrag>();
 
-            erweiterteGoodSyncLogs.Add(new ImportStatisticEintrag
+            erweiterteGoodSyncLogs.Add(new ImportStatisticAggdEintrag
             {
                 Cid = 1000,
                 Zaehltag = new DateTime(2016, 5, 1)
             });
 
-            erweiterteGoodSyncLogs.Add(new ImportStatisticEintrag
+            erweiterteGoodSyncLogs.Add(new ImportStatisticAggdEintrag
             {
                 Cid = 1000,
                 Zaehltag = new DateTime(2016, 5, 2)

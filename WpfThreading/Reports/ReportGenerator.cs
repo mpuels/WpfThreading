@@ -20,14 +20,14 @@ namespace WpfThreading.Reports
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken)
         {
-            var impstat = await dbGateway.FetchImportStatisticAsync(
-                aktivitaetszeitraeume, cancellationToken);
-
-            var expstat = await dbGateway.FetchExportStatisticAsync(
-                aktivitaetszeitraeume, cancellationToken);
-
             var zeitstrahl = ZeitstrahlGenerator.ErstelleZeitstrahl(
                 aktivitaetszeitraeume);
+
+            var impstat = await dbGateway.Public_BinaryData_Import_Statistic_Aggd_Async(
+                aktivitaetszeitraeume, cancellationToken);
+
+            var expstat = await dbGateway.Public_BinaryData_Export_Statistic_Async(
+                aktivitaetszeitraeume, cancellationToken);
 
             var erweiterteGoodSyncLogs =
                 (from zs in zeitstrahl
@@ -35,7 +35,7 @@ namespace WpfThreading.Reports
                      on new { cid = zs.Cid, zaehltag = zs.Zaehltag }
                          equals new { cid = imps.Cid, zaehltag = imps.Zaehltag }
                      into imps_
-                     from imps__ in imps_.DefaultIfEmpty(new ImportStatisticEintrag())
+                     from imps__ in imps_.DefaultIfEmpty(new ImportStatisticAggdEintrag())
                  join exps in expstat
                      on new { cid = zs.Cid, zaehltag = zs.Zaehltag }
                          equals new { cid = exps.Cid, zaehltag = exps.Zaehltag }
@@ -45,9 +45,19 @@ namespace WpfThreading.Reports
                  {
                      Cid = zs.Cid,
                      Zaehltag = zs.Zaehltag,
-                     Dateiname = exps__.Dateiname,
-                     ISNBinDateien = imps__.NBinDateien,
-                     ESExportZeitpunkt = exps__.Exportzeitpunkt,
+
+                     // Import-Statistik.
+                     ISBeginDateMin = imps__.BeginDateMin,
+                     ISEndDateMax = imps__.EndDateMax,
+                     ISImportDateMax = imps__.ImportDateMax,
+                     ISNDebugTurnusSum = imps__.NDebugTurnusSum,
+                     ISNEintraege = imps__.NEintraege,
+
+                     // Export-Statistik.
+                     ESBeginDate = exps__.BeginDate,
+                     ESEndDate = exps__.EndDate,
+                     ESExportDate = exps__.ExportDate,
+                     ESFileIdx = exps__.FileIdx,
                  }
                  ).ToList();
 

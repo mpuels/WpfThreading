@@ -16,9 +16,19 @@ namespace WpfThreading.Entities
     {
         public int Cid { get; set; }
         public DateTime Zaehltag { get; set; }
-        public string Dateiname { get; set; }
-        public int? ISNBinDateien { get; set; }
-        public DateTime? ESExportZeitpunkt { get; set; }
+
+        // Infos aus Import-Statistik.
+        public DateTime? ISBeginDateMin { get; set; }
+        public DateTime? ISEndDateMax { get; set; }
+        public DateTime? ISImportDateMax { get; set; }
+        public int? ISNDebugTurnusSum { get; set; }
+        public int? ISNEintraege { get; set; }
+
+        // Infos aus Export-Statistik.
+        public DateTime? ESBeginDate { get; set; }
+        public DateTime? ESEndDate { get; set; }
+        public DateTime? ESExportDate { get; set; }
+        public int? ESFileIdx { get; set; }
 
         public bool Equals(ErweiterterGoodSyncLogEintrag other)
         {
@@ -30,9 +40,20 @@ namespace WpfThreading.Entities
             {
                 return Cid == other.Cid
                     && Zaehltag == other.Zaehltag
-                    && Dateiname == other.Dateiname
-                    && ISNBinDateien == other.ISNBinDateien
-                    && ESExportZeitpunkt == other.ESExportZeitpunkt;
+
+                    // Import-Statistik.
+                    && ISBeginDateMin == other.ISBeginDateMin
+                    && ISEndDateMax == other.ISEndDateMax
+                    && ISImportDateMax == other.ISImportDateMax
+                    && ISNDebugTurnusSum == other.ISNDebugTurnusSum
+                    && ISNEintraege == other.ISNEintraege
+                    
+                    // Export-Statistik.
+                    && ESBeginDate == other.ESBeginDate
+                    && ESEndDate == other.ESEndDate
+                    && ESExportDate == other.ESExportDate
+                    && ESFileIdx == other.ESFileIdx
+                    ;
             }
         }
 

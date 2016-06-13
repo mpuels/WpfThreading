@@ -13,14 +13,16 @@ namespace WpfThreadingTests.Reports
         }
 
         public ExportStatistic Add(int cid, string zaehltag,
-            string dateiname, string exportzeitpunkt)
+            string beginDate, string endDate, string exportDate, int fileIdx)
         {
             eintraege.Add(new ExportStatisticEintrag()
             {
                 Cid = cid,
                 Zaehltag = Date.ParseExact(zaehltag),
-                Dateiname = dateiname,
-                Exportzeitpunkt = Date.ParseExact(exportzeitpunkt),
+                BeginDate = Date.ParseExact(beginDate),
+                EndDate = Date.ParseExact(endDate),
+                ExportDate = Date.ParseExact(exportDate),
+                FileIdx = fileIdx,
             });
             return this;
         }

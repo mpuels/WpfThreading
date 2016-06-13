@@ -6,7 +6,9 @@ namespace WpfThreading.Entities
     {
         public int Cid { get; set; }
         public DateTime Zaehltag { get; set; }
-        public string Dateiname { get; set; }
-        public DateTime? Exportzeitpunkt { get; set; }
+        public DateTime? BeginDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? ExportDate { get; set; }
+        public int? FileIdx { get; set; }
     }
 }

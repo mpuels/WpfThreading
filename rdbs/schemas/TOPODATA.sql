@@ -17,6 +17,8 @@ SET row_security = off;
 -- Name: TOPODATA; Type: DATABASE; Schema: -; Owner: topodata
 --
 
+DROP DATABASE IF EXISTS "TOPODATA";
+
 CREATE DATABASE "TOPODATA" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'German_Germany.1252' LC_CTYPE = 'German_Germany.1252';
 
 
@@ -67,39 +69,154 @@ CREATE TABLE exportstatistic (
 ALTER TABLE exportstatistic OWNER TO topodata;
 
 --
--- Name: importstatistic; Type: TABLE; Schema: public; Owner: topodata
+-- Name: BinaryData_Import_Statistic; Type: TABLE; Schema: public; Owner: topodata; Tablespace: 
 --
 
-CREATE TABLE importstatistic (
-    cid integer,
-    begin_date timestamp without time zone,
-    end_date timestamp without time zone,
-    n_vehicles integer,
-    dateiname text
+CREATE TABLE "BinaryData_Import_Statistic" (
+    "BinaryData_ControllerId" integer DEFAULT (-1) NOT NULL,
+    "BinaryData_EndDate" timestamp with time zone DEFAULT '1970-01-01 00:00:00+01'::timestamp with time zone NOT NULL,
+    "BinaryData_BeginDate" timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "BinaryData_ImportDate" timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "BinaryData_DataCount_DebugTurnus" integer DEFAULT (-1) NOT NULL
+);
+
+ALTER TABLE public."BinaryData_Import_Statistic" OWNER TO topodata;
+
+INSERT INTO public."BinaryData_Import_Statistic" (
+	"BinaryData_ControllerId",
+	"BinaryData_BeginDate",
+	"BinaryData_EndDate",
+	"BinaryData_ImportDate",
+	"BinaryData_DataCount_DebugTurnus"
+	)
+	VALUES
+	(1000, '2016-01-01 00:00:00'::timestamp, '2016-01-01 03:00:00'::timestamp, '2016-01-02 05:00:00'::timestamp, 10),
+	(1000, '2016-01-01 03:00:00', '2016-01-01 23:59:00', '2016-01-02 05:00:00', 100),
+	(2000, '2016-01-01 00:00:00', '2016-01-01 03:00:00', '2016-01-02 05:00:00', 11),
+	(2000, '2016-01-01 03:00:00', '2016-01-01 23:59:00', '2016-01-02 05:00:00', 110)
+	;
+
+--
+-- Name: BinaryData_Export_Statistic; Type: TABLE; Schema: public; Owner: topodata; Tablespace: 
+--
+
+CREATE TABLE public."BinaryData_Export_Statistic" (
+    "BinaryData_ControllerId" integer NOT NULL,
+    "BinaryData_EndDate" timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "BinaryData_BeginDate" timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "BinaryData_ExportDate" timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "BinaryData_FileIdx" integer DEFAULT 0 NOT NULL
 );
 
 
-ALTER TABLE importstatistic OWNER TO topodata;
+ALTER TABLE public."BinaryData_Export_Statistic" OWNER TO topodata;
+
+INSERT INTO public."BinaryData_Export_Statistic" (
+	"BinaryData_ControllerId",
+	"BinaryData_BeginDate",
+	"BinaryData_EndDate",
+	"BinaryData_ExportDate",
+	"BinaryData_FileIdx"
+	)
+	VALUES
+	(1000, '2016-01-01 00:00:00'::timestamp, '2016-01-01 17:00:00'::timestamp, '2016-01-02 05:00:00'::timestamp, 1),
+	(1000, '2016-01-01 00:00:00', '2016-01-01 23:59:00', '2016-01-03 05:10:00', 2),
+	(2000, '2016-01-01 00:00:00', '2016-01-01 23:58:00', '2016-01-03 05:05:00', 1)
+	;
+	
+--
+-- Name: BinaryData_DebugTurnus; Type: TABLE; Schema: public; Owner: topodata; Tablespace: 
+--
+
+CREATE TABLE "BinaryData_DebugTurnus" (
+    "BinaryData_CorrectionDate" timestamp without time zone,
+    "BinaryData_ControllerId" smallint,
+    "BinaryData_DataType" smallint,
+    "BinaryData_IgnoreType" smallint,
+    "BinaryData_Data" bytea,
+    "BinaryData_VehicleType" smallint,
+    "BinaryData_Block" smallint,
+    "BinaryData_Line" smallint,
+    "BinaryData_FileName_Ref" integer DEFAULT (-1)
+);
+
+ALTER TABLE public."BinaryData_DebugTurnus" OWNER TO topodata;
+
 
 --
--- Data for Name: exportstatistic; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: BinaryData_Controller; Type: TABLE; Schema: public; Owner: topodata; Tablespace: 
 --
 
-COPY exportstatistic (cid, zaehltag, dateiname, exportzeitpunkt) FROM stdin;
-1000	2016-01-01 00:00:00	052_1000_1.txt	2016-01-02 07:00:00
-2000	2016-01-02 00:00:00	052_2000_1.txt	2016-01-03 07:00:00
+CREATE TABLE "BinaryData_Controller" (
+    "BinaryData_ControllerId" smallint NOT NULL,
+    "BinaryData_Ignore_MeasurementHeader" boolean DEFAULT false,
+    "BinaryData_StartDate" timestamp without time zone,
+    "BinaryData_ExportFolder" text,
+    "BinaryData_ExportLanguage" text,
+    "BinaryData_EndDate" timestamp without time zone,
+    "BinaryData_ControllerIdExport" smallint,
+    "BinaryData_ClassCode" smallint,
+    "BinaryData_ExportFormat" smallint DEFAULT 0,
+    "ID" integer NOT NULL,
+    "BinaryData_EditDate" timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public."BinaryData_Controller" OWNER TO topodata;
+
+--
+-- Name: BinaryData_Export_Files; Type: TABLE; Schema: public; Owner: topodata; Tablespace: topodata_san
+--
+
+CREATE TABLE "BinaryData_Export_Files" (
+    "BinaryData_Export_FileName" text,
+    "BinaryData_Date" timestamp with time zone,
+    "BinaryData_ControllerId" smallint,
+    "BinaryData_Export_FileData" text,
+    "ID" integer NOT NULL
+);
+
+
+ALTER TABLE public."BinaryData_Export_Files" OWNER TO topodata;
+
+CREATE SCHEMA pgmssql AUTHORIZATION topodata;
+
+--
+-- Name: BinaryData_Controller_Types; Type: TABLE; Schema: pgmssql; Owner: topodata; Tablespace: 
+--
+
+CREATE TABLE pgmssql."BinaryData_Controller_Types" (
+    "ControllerType" text,
+    "ID" integer NOT NULL,
+    aggregation_type_id smallint
+);
+
+ALTER TABLE pgmssql."BinaryData_Controller_Types" OWNER TO topodata;
+
+COPY pgmssql."BinaryData_Controller_Types" ("ControllerType", "ID", aggregation_type_id) FROM stdin;
+Type 1	0	1
+Type 2	1	2
+Type 3	2	3
+Type 4	3	4
 \.
 
-
 --
--- Data for Name: importstatistic; Type: TABLE DATA; Schema: public; Owner: topodata
+-- Name: BinaryData_Controller; Type: TABLE; Schema: pgmssql; Owner: topodata; Tablespace: 
 --
 
-COPY importstatistic (cid, begin_date, end_date, n_vehicles, dateiname) FROM stdin;
-1000	2016-01-01 00:00:00	2016-01-01 03:00:00	100	Stat_1000_1.bin
-1000	2016-01-01 03:00:01	2016-01-01 23:59:00	999	Stat_1000_2.bin
-2000	2016-01-02 00:00:00	2016-01-02 03:00:00	100	Stat_2000_1.bin
-2000	2016-01-02 03:00:01	2016-01-02 23:59:00	999	Stat_2000_2.bin
+CREATE TABLE pgmssql."BinaryData_Controller" (
+    "BinaryData_ControllerId" smallint NOT NULL,
+    "BinaryData_ControllerType" smallint
+);
+
+ALTER TABLE pgmssql."BinaryData_Controller" OWNER TO topodata;
+
+COPY pgmssql."BinaryData_Controller" ("BinaryData_ControllerId", "BinaryData_ControllerType") FROM stdin;
+293	4
+370	3
+401	2
+405	1
+428	4
 \.
 
 

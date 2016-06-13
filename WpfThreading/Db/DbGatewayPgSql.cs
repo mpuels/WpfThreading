@@ -20,7 +20,7 @@ namespace WpfThreading.Db
             this.connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<ExportStatisticEintrag>> FetchExportStatisticAsync(
+        public async Task<IEnumerable<ExportStatisticEintrag>> Public_BinaryData_Export_Statistic_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken)
         {
@@ -34,16 +34,18 @@ namespace WpfThreading.Db
                     selectCmd.Connection = conn;
                     selectCmd.CommandText = @"
                         SELECT
-                            t.cid,
-                            t.zaehltag,
-                            t.dateiname,
-                            t.exportzeitpunkt
+                            t.""BinaryData_ControllerId"" AS cid,
+                            t.""BinaryData_BeginDate""::date AS zaehltag,
+                            t.""BinaryData_BeginDate"" AS begin_date,
+                            t.""BinaryData_EndDate"" AS end_date,
+                            t.""BinaryData_ExportDate"" AS export_date,
+                            t.""BinaryData_FileIdx"" AS file_idx
                         FROM
-                            exportstatistic as t
+                            public.""BinaryData_Export_Statistic"" as t
                         WHERE
                             t.cid = @cid AND
-                            t.zaehltag >= @von AND
-                            t.zaehltag <= @bis
+                            t.""BinaryData_BeginDate"" >= @von AND
+                            t.""BinaryData_BeginDate""  < @bis + '1day'
                     ";
 
                     foreach (var aktivitaetszeitraum in aktivitaetszeitraeume)
@@ -61,8 +63,10 @@ namespace WpfThreading.Db
                             {
                                 Cid = reader.GetInt32(0),
                                 Zaehltag = reader.GetDateTime(1),
-                                Dateiname = reader.GetString(2),
-                                Exportzeitpunkt = reader.GetDateTime(3),
+                                BeginDate = reader.GetDateTime(2),
+                                EndDate = reader.GetDateTime(3),
+                                ExportDate = reader.GetDateTime(4),
+                                FileIdx = reader.GetInt32(5),
                             });
                         }
                         reader.Close();
@@ -72,11 +76,11 @@ namespace WpfThreading.Db
             return exportstatistic;
         }
 
-        public async Task<IEnumerable<ImportStatisticEintrag>> FetchImportStatisticAsync(
+        public async Task<IEnumerable<ImportStatisticAggdEintrag>> Public_BinaryData_Import_Statistic_Aggd_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken)
         {
-            var importstatistic = new List<ImportStatisticEintrag>();
+            var importstatistic = new List<ImportStatisticAggdEintrag>();
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -86,18 +90,25 @@ namespace WpfThreading.Db
                     selectCmd.Connection = conn;
                     selectCmd.CommandText = @"
                         SELECT
-                            t.cid,
-                            t.begin_date::date::timestamp AS zaehltag,
-                            COUNT(*) AS n_bindateien
+                            t.""BinaryData_ControllerId"" AS cid,
+                            t.""BinaryData_BeginDate""::date AS zaehltag,
+                            MIN(t.""BinaryData_BeginDate"") AS begin_date_min,
+                            MAX(t.""BinaryData_EndDate"") AS end_date_max,
+                            MAX(t.""BinaryData_ImportDate"") AS import_date_max,
+                            SUM(t.""BinaryData_DataCount_DebugTurnus"") AS n_debug_turnus_sum,
+                            COUNT(*) AS n_eintraege,
                         FROM
-                            importstatistic as t
+                            public.""BinaryData_Import_Statistic"" as t
                         WHERE
-                            t.cid = @cid AND
-                            t.begin_date >= @von AND
-                            t.begin_date <= @bis
+                            t.""BinaryData_ControllerId"" = @cid AND
+                            t.""BinaryData_BeginDate"" >= @von AND
+                            t.""BinaryData_BeginDate""  < @bis + '1day'
                         GROUP BY
-                            t.cid,
-                            t.begin_date::date::timestamp
+                            t.""BinaryData_ControllerId"",
+                            t.""BinaryData_BeginDate""::date
+                        ORDER BY
+                            t.""BinaryData_ControllerId"",
+                            t.""BinaryData_BeginDate""::date
                     ";
 
                     foreach (var aktivitaetszeitraum in aktivitaetszeitraeume)
@@ -111,11 +122,15 @@ namespace WpfThreading.Db
 
                         while (reader.Read())
                         {
-                            importstatistic.Add(new ImportStatisticEintrag()
+                            importstatistic.Add(new ImportStatisticAggdEintrag()
                             {
                                 Cid = reader.GetInt32(0),
                                 Zaehltag = reader.GetDateTime(1),
-                                NBinDateien = reader.GetInt32(2),
+                                BeginDateMin = reader.GetDateTime(2),
+                                EndDateMax = reader.GetDateTime(3),
+                                ImportDateMax = reader.GetDateTime(4),
+                                NDebugTurnusSum = reader.GetInt32(5),
+                                NEintraege = reader.GetInt32(6),
                             });
                         }
                         reader.Close();
@@ -123,6 +138,13 @@ namespace WpfThreading.Db
                 }
             }
             return importstatistic;
+        }
+
+        public async Task<IEnumerable<Entities.pgmssql.BinaryData_Controller>> Pgmssql_BinaryData_ControllerAsync(
+            IEnumerable<int> cids,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

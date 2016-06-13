@@ -7,12 +7,16 @@ namespace WpfThreading.Services
 {
     public interface IDbGateway
     {
-        Task<IEnumerable<ImportStatisticEintrag>> FetchImportStatisticAsync(
+        Task<IEnumerable<ImportStatisticAggdEintrag>> Public_BinaryData_Import_Statistic_Aggd_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
             CancellationToken cancellationToken);
 
-        Task<IEnumerable<ExportStatisticEintrag>> FetchExportStatisticAsync(
+        Task<IEnumerable<ExportStatisticEintrag>> Public_BinaryData_Export_Statistic_Async(
             IEnumerable<Aktivitaetszeitraum> aktivitaetszeitraeume,
+            CancellationToken cancellationToken);
+
+        Task<IEnumerable<Entities.pgmssql.BinaryData_Controller>> Pgmssql_BinaryData_ControllerAsync(
+            IEnumerable<int> cids,
             CancellationToken cancellationToken);
     }
 }

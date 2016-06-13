@@ -20,17 +20,37 @@ namespace WpfThreadingTests.Reports
 
         public ErweiterteGoodSyncLogs Add(int cid,
                                           string zaehltag,
-                                          string dateiname,
-                                          int? isNBinDateien,
-                                          string esExportzeitpunkt)
+
+                                          // Import-Statistik.
+                                          string isBeginDateMin,
+                                          string isEndDateMax,
+                                          string isImportDateMax,
+                                          int? isNDebugTurnusSum,
+                                          int? isNEintraege,
+                                          
+                                          // Export-Statistik.
+                                          string esBeginDate,
+                                          string esEndDate,
+                                          string esExportDate,
+                                          int? esFileIdx)
         {
             Eintraege.Add(new ErweiterterGoodSyncLogEintrag()
             {
                 Cid = cid,
                 Zaehltag = Date.ParseExact(zaehltag),
-                Dateiname = dateiname,
-                ISNBinDateien = isNBinDateien,
-                ESExportZeitpunkt = Date.ParseIfNotNull(esExportzeitpunkt),
+
+                // Import-Statistik.
+                ISBeginDateMin = Date.ParseIfNotNull(isBeginDateMin),
+                ISEndDateMax = Date.ParseIfNotNull(isEndDateMax),
+                ISImportDateMax = Date.ParseIfNotNull(isImportDateMax),
+                ISNDebugTurnusSum = isNDebugTurnusSum,
+                ISNEintraege = isNEintraege,
+
+                // Export-Statistik.
+                ESBeginDate = Date.ParseIfNotNull(esBeginDate),
+                ESEndDate = Date.ParseIfNotNull(esEndDate),
+                ESExportDate = Date.ParseIfNotNull(esExportDate),
+                ESFileIdx = esFileIdx,
             });
 
             return this;

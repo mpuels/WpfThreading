@@ -110,6 +110,7 @@
     <Compile Include="Entities\Aktivitaetszeitraum.cs" />
     <Compile Include="Db\DbGatewayDemo.cs" />
     <Compile Include="Entities\ExportStatisticEintrag.cs" />
+    <Compile Include="Entities\pgmssql\BinaryData_Controller.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Services\IDbGateway.cs" />
     <Compile Include="Entities\ImportStatisticEintrag.cs" />
@@ -160,7 +161,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\public\" />
+    <Folder Include="Entities\topocheck\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
