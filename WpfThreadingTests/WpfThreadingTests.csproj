@@ -72,7 +72,7 @@
     <Compile Include="Reports\Date.cs" />
     <Compile Include="Reports\ErweiterteGoodSyncLogs.cs" />
     <Compile Include="Reports\ExportStatistic.cs" />
-    <Compile Include="Reports\ImportStatistic.cs" />
+    <Compile Include="Reports\ImportStatisticAggd.cs" />
     <Compile Include="Reports\ReportGeneratorTest.cs" />
     <Compile Include="Reports\Zeitstrahl.cs" />
     <Compile Include="Reports\ZeitstrahlGeneratorTest.cs" />
